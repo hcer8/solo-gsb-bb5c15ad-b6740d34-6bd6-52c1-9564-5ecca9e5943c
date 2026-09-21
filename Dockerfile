@@ -11,6 +11,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app ./app
 
+# SQLite policy database lives here; a Docker volume is mounted at this path.
+# Owned by the unprivileged runtime user so it can create/rename files in it.
+RUN mkdir -p /data && chown nobody:nogroup /data
+VOLUME ["/data"]
+ENV POLICY_DB=/data/policies.db
+
 EXPOSE 8080
 
 USER nobody
